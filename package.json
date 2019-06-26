@@ -1,0 +1,30 @@
+{
+  "name": "gatsby-theme-marketing-sanity",
+  "author": "Jason Lengstorf <jason@lengstorf.com>",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "peerDependencies": {
+    "gatsby": "^2.10.4",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6"
+  },
+  "devDependencies": {
+    "gatsby": "^2.10.4",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6"
+  },
+  "dependencies": {
+    "@emotion/core": "^10.0.10",
+    "@mdx-js/react": "^1.0.21",
+    "@sanity/block-content-to-react": "^2.0.6",
+    "gatsby-source-sanity": "^4.0.4",
+    "gatsby-theme-ui": "^0.2.0",
+    "theme-ui": "^0.2.0"
+  },
+  "keywords": [
+    "gatsby",
+    "gatsby-theme",
+    "gatsby-plugin"
+  ]
+}

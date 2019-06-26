@@ -67,7 +67,3 @@ yarn-error.log
 .pnp.js
 # Yarn Integrity file
 .yarn-integrity
-
-# Special stuff so I can use Yarn workspaces but not commit that to Git
-/packages
-/package.json
