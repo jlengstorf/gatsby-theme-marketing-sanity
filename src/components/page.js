@@ -4,6 +4,7 @@ import PortableText from './portable-text';
 
 const Page = props => {
   const { content, ...otherProps } = props;
+
   return (
     <>
       <h1>Plz shadow me!</h1>
