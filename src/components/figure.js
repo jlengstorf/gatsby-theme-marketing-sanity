@@ -4,7 +4,7 @@ import { getFluidGatsbyImage } from 'gatsby-source-sanity';
 
 const Figure = ({ node }) => {
   const fluidProps = getFluidGatsbyImage(
-    node.asset._id,
+    node.asset._ref,
     { maxWidth: 540 },
     {
       projectId: process.env.GATSBY_SANITY_PROJECT_ID,
