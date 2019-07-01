@@ -1,5 +1,6 @@
 import React from 'react';
 import { Styled } from 'theme-ui';
+import { MDXRenderer } from 'gatsby-plugin-mdx';
 import PortableText from './portable-text';
 
 const Page = props => {
@@ -41,6 +42,7 @@ const Page = props => {
         There is also a <Styled.code>content</Styled.code> prop which contains
         the following:
       </p>
+      {/* <MDXRenderer>{props.content}</MDXRenderer> */}
       <PortableText blocks={props.content} />
     </>
   );

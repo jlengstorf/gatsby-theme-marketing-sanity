@@ -15,5 +15,6 @@ module.exports = ({ sanity, basePath = '/' }) => ({
         watchMode: sanity.watchMode,
       },
     },
+    'gatsby-plugin-mdx',
   ],
 });
