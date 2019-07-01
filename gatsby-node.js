@@ -27,6 +27,8 @@ exports.sourceNodes = ({ actions, schema }) => {
               id: source.children[0],
             });
 
+            console.log(source);
+
             const content = await resolver(mdxNode, {}, context, {
               fieldName: 'body',
             });
@@ -57,14 +59,16 @@ exports.onCreateNode = async ({
     description: node.seo.description,
   };
 
+  const mdx = node.mdx || '';
+
   const mdNode = {
     ...data,
     parent: node.id,
     internal: {
       type: 'MarketingPage',
       mediaType: 'text/markdown',
-      content: node.mdx || '',
-      contentDigest: createContentDigest(data),
+      content: mdx,
+      contentDigest: createContentDigest(mdx),
     },
   };
 
