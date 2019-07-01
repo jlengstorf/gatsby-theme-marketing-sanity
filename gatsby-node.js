@@ -1,57 +1,37 @@
 exports.sourceNodes = ({ actions, schema }) => {
-  // actions.createTypes(`
-  //   type GenericPage implements Node @dontInfer {
-  //     title: String!
-  //     slug: String!
-  //     image: String!
-  //     description: String!
-  //     content: JSON!
-  //   }
-  // `);
-
   actions.createTypes(
     schema.buildObjectType({
-      name: 'GenericPage',
+      name: 'MarketingPage',
       interfaces: ['Node'],
       fields: {
         id: { type: 'ID!' },
-        title: {
-          type: 'String!',
-          resolve: source => source.seo.title,
-        },
-        slug: {
-          type: 'String!',
-          resolve: source => source.slug.current,
-        },
-        image: {
-          type: 'String!',
-          resolve: async (source, _args, context) => {
-            const image = await context.nodeModel.getNodeById({
-              id: source.seo.image.asset._ref,
-            });
+        title: { type: 'String!' },
+        slug: { type: 'String!' },
+        // image: {
+        //   type: 'String!',
+        //   resolve: async (source, _args, context) => {
+        //     const image = await context.nodeModel.getNodeById({
+        //       id: source.seo.image.asset._ref,
+        //     });
 
-            return `${image.url}?w=1280&h=686&fit=crop`;
-          },
-        },
-        description: {
-          type: 'String!',
-          resolve: source => source.seo.description,
-        },
+        //     return `${image.url}?w=1280&h=686&fit=crop`;
+        //   },
+        // },
+        description: { type: 'String!' },
         content: {
           type: 'String!',
           resolve: async (source, _args, context, info) => {
-            console.log(source);
             const type = info.schema.getType('Mdx');
-            const mdxNode = context.nodeModel.getNodeById({
-              id: source.parent,
-            });
             const resolver = type.getFields()['body'].resolve;
+            const mdxNode = context.nodeModel.getNodeById({
+              id: source.children[0],
+            });
 
-            // const content = await resolver(mdxNode, {}, context, {
-            //   fieldName: 'mdx',
-            // });
+            const content = await resolver(mdxNode, {}, context, {
+              fieldName: 'body',
+            });
 
-            return JSON.stringify({ test: 'content' });
+            return content;
           },
         },
       },
@@ -70,17 +50,20 @@ exports.onCreateNode = async ({
   }
 
   const data = {
-    id: createNodeId(`GenericPage-${node.id}`),
-    mdx: node.mdx || null,
+    id: createNodeId(`MarketingPage-${node.id}`),
+    title: node.seo.title,
+    slug: node.slug.current,
+    // image: ,
+    description: node.seo.description,
   };
 
   const mdNode = {
     ...data,
     parent: node.id,
     internal: {
-      type: 'GenericPage',
+      type: 'MarketingPage',
       mediaType: 'text/markdown',
-      content: JSON.stringify(data),
+      content: node.mdx || '',
       contentDigest: createContentDigest(data),
     },
   };
@@ -89,69 +72,10 @@ exports.onCreateNode = async ({
   actions.createParentChildLink({ parent: node, child: mdNode });
 };
 
-// exports.createResolvers = ({ createResolvers, createNodeId }) => {
-//   const getImage = async (id, context) => {
-//     const image = await context.nodeModel.getNodeById({ id });
-//     return `${image.url}?w=1280&h=686&fit=crop`;
-//   };
-
-//   const sanityToGeneric = (page, context) => {
-//     const image = getImage(page.seo.image.asset._ref, context);
-
-//     return {
-//       id: createNodeId(`GenericPage-${page.id}`),
-//       title: page.seo.title,
-//       slug: page.slug.current,
-//       description: page.seo.description,
-//       content: page._rawDataContent,
-//       image,
-//     };
-//   };
-
-//   createResolvers({
-//     Query: {
-//       page: {
-//         type: 'GenericPage',
-//         args: {
-//           slug: 'String!',
-//         },
-//         async resolve(_source, args, context) {
-//           const page = await context.nodeModel.runQuery({
-//             query: {
-//               filter: {
-//                 slug: { current: { eq: args.slug } },
-//               },
-//             },
-//             type: 'SanityPage',
-//             firstOnly: true,
-//           });
-
-//           const mdx = await context.nodeModel.getNodeById(page.children[0]);
-//           console.log(page.children);
-
-//           return sanityToGeneric(page, context);
-//         },
-//       },
-//       allPage: {
-//         type: 'GenericPageConnection!',
-//         async resolve(_source, _args, context) {
-//           const pages = await context.nodeModel.getAllNodes({
-//             type: 'SanityPage',
-//           });
-
-//           return {
-//             nodes: pages.map(page => sanityToGeneric(page, context)),
-//           };
-//         },
-//       },
-//     },
-//   });
-// };
-
 exports.createPages = async ({ actions, graphql, reporter }) => {
   const result = await graphql(`
     query {
-      allPage {
+      allMarketingPage {
         nodes {
           slug
         }
@@ -164,7 +88,7 @@ exports.createPages = async ({ actions, graphql, reporter }) => {
     result;
   }
 
-  result.data.allPage.nodes.forEach(page => {
+  result.data.allMarketingPage.nodes.forEach(page => {
     actions.createPage({
       path: page.slug === 'home' ? '/' : page.slug,
       component: require.resolve('./src/templates/page-template.js'),

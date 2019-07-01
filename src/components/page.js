@@ -42,8 +42,8 @@ const Page = props => {
         There is also a <Styled.code>content</Styled.code> prop which contains
         the following:
       </p>
-      {/* <MDXRenderer>{props.content}</MDXRenderer> */}
-      <PortableText blocks={props.content} />
+      <MDXRenderer>{props.content}</MDXRenderer>
+      {/* <PortableText blocks={props.content} /> */}
     </>
   );
 };

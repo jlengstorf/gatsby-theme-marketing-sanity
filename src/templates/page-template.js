@@ -5,12 +5,12 @@ import Page from '../components/page';
 
 export const query = graphql`
   query($slug: String!) {
-    page(slug: $slug) {
+    marketingPage(slug: { eq: $slug }) {
       id
       slug
       title
       description
-      image
+      # image
       content
     }
   }
@@ -18,8 +18,10 @@ export const query = graphql`
 
 const PageTemplate = ({ data }) => (
   <Layout>
-    <Page {...data.page} />
+    <Page {...data.marketingPage} />
   </Layout>
 );
 
 export default PageTemplate;
+
+// export default () => <p>test</p>;
