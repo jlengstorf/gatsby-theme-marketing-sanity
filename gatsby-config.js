@@ -4,7 +4,7 @@ module.exports = ({ sanity, basePath = '/' }) => ({
     basePath,
   },
   plugins: [
-    'gatsby-theme-ui',
+    'gatsby-plugin-theme-ui',
     {
       resolve: 'gatsby-source-sanity',
       options: {
