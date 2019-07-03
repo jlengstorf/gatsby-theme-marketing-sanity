@@ -3,8 +3,8 @@ module.exports = ({ sanity, basePath = '/' }) => ({
     title: 'Gatsby Marketing Theme',
     basePath,
   },
-  __experimentalThemes: ['gatsby-theme-ui'],
   plugins: [
+    'gatsby-theme-ui',
     {
       resolve: 'gatsby-source-sanity',
       options: {
